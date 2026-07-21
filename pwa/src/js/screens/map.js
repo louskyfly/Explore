@@ -27,7 +27,16 @@ const allCategories = [
 ];
 
 function getCity(id) { return cities.find(c => c.id === id); }
-function getRoute(cityId, routeId) { return getCity(cityId)?.routes.find(r => r.id === routeId); }
+
+function buildGoogleMapsRouteUrl(steps) {
+  if (steps.length < 2) return '#';
+  const origin = `${steps[0].lat},${steps[0].lng}`;
+  const destination = `${steps[steps.length - 1].lat},${steps[steps.length - 1].lng}`;
+  const waypoints = steps.slice(1, -1).map(s => `${s.lat},${s.lng}`).join('|');
+  let url = `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=walking`;
+  if (waypoints) url += `&waypoints=${encodeURIComponent(waypoints)}`;
+  return url;
+}
 
 export function renderMap(container) {
   updateHeader('Carte');
@@ -38,6 +47,7 @@ export function renderMap(container) {
     map = null;
   }
   mapReady = false;
+
   container.innerHTML = `
     <div class="map-page">
       <div class="map-city-selector">
@@ -153,6 +163,7 @@ function initMap() {
     setTimeout(() => initMap(), 500);
   }
 }
+
 function updateMapMarkers() {
   if (!map) return;
 
@@ -180,37 +191,83 @@ function updateMapMarkers() {
 }
 
 function renderRouteOnMap(route, city) {
-  const coords = [];
-  route.steps.forEach((step, i) => {
-    addMarker({
-      id: step.poiId || step.id,
-      name: step.name,
-      description: step.description,
-      lat: step.lat,
-      lng: step.lng,
-      category: step.category,
-      emoji: city.categories[step.category]?.icon || '📍',
-      stepIndex: i,
-      routeId: route.id,
-      challenges: step.challenges || []
-    }, city, route);
+  const steps = route.steps.map((step, i) => ({
+    id: step.poiId || step.id,
+    name: step.name,
+    description: step.description,
+    lat: step.lat,
+    lng: step.lng,
+    category: step.category,
+    emoji: city.categories[step.category]?.icon || '📍',
+    stepIndex: i,
+    routeId: route.id,
+    challenges: step.challenges || []
+  }));
 
-    coords.push([step.lat, step.lng]);
-  });
+  steps.forEach(step => addMarker(step, city, route));
 
-  if (coords.length > 1) {
-    const polyline = L.polyline(coords, {
-      color: route.color,
+  const mapsUrl = buildGoogleMapsRouteUrl(steps);
+
+  const navBanner = document.getElementById('map-nav-banner');
+  if (navBanner) navBanner.remove();
+
+  const banner = document.createElement('div');
+  banner.id = 'map-nav-banner';
+  banner.className = 'map-nav-banner';
+  banner.innerHTML = `
+    <a href="${mapsUrl}" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="flex:1">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3,11 22,2 13,21 11,13 3,11"/></svg>
+      🚶 Marcher ce parcours sur Maps
+    </a>
+    <button class="btn btn-secondary btn-sm" id="btn-close-nav-banner">✕</button>
+  `;
+  document.querySelector('.map-page')?.appendChild(banner);
+  document.getElementById('btn-close-nav-banner')?.addEventListener('click', () => banner.remove());
+
+  fetchOSRMRoute(steps, route.color);
+}
+
+async function fetchOSRMRoute(steps, color) {
+  if (steps.length < 2) return;
+
+  const coords = steps.map(s => `${s.lng},${s.lat}`).join(';');
+
+  try {
+    const resp = await fetch(`https://router.project-osrm.org/route/v1/foot/${coords}?overview=full&geometries=geojson&steps=true`);
+    const data = await resp.json();
+
+    if (data.code === 'Ok' && data.routes?.[0]?.geometry) {
+      const routeCoords = data.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
+
+      const polyline = L.polyline(routeCoords, {
+        color: color,
+        weight: 4,
+        opacity: 0.85,
+        lineCap: 'round',
+        lineJoin: 'round'
+      }).addTo(map);
+      polylines.push(polyline);
+
+      map.fitBounds(polyline.getBounds(), { padding: [80, 80] });
+      return;
+    }
+  } catch (e) {
+    console.warn('OSRM failed, using straight lines:', e);
+  }
+
+  const coordsFallback = steps.map(s => [s.lat, s.lng]);
+  if (coordsFallback.length > 1) {
+    const polyline = L.polyline(coordsFallback, {
+      color: color,
       weight: 4,
-      opacity: 0.8,
+      opacity: 0.7,
       dashArray: '8, 8',
       lineCap: 'round'
     }).addTo(map);
     polylines.push(polyline);
   }
-
-  if (coords.length) {
-    map.fitBounds(L.latLngBounds(coords), { padding: [80, 80] });
+  if (coordsFallback.length) {
+    map.fitBounds(L.latLngBounds(coordsFallback), { padding: [80, 80] });
   }
 }
 
@@ -235,7 +292,7 @@ function addMarker(poi, city, route = null) {
 
   const marker = L.marker([poi.lat, poi.lng], { icon }).addTo(map);
 
-  const navigateUrl = `https://www.google.com/maps/dir/?api=1&destination=${poi.lat},${poi.lng}`;
+  const navigateUrl = `https://www.google.com/maps/dir/?api=1&destination=${poi.lat},${poi.lng}&travelmode=walking`;
   const popupContent = `
     <div class="map-popup">
       <div class="map-popup-icon" style="background:${color}20;color:${color}">${poi.emoji || cat?.icon || '📍'}</div>
@@ -341,7 +398,7 @@ async function initCameraForPoi(poi, route) {
 async function processMapPhoto(photoData, poi, route, resultDiv, scoreDiv) {
   analysis.init();
   resultDiv.innerHTML = `<div class="photo-result"><img src="${photoData}" alt="Photo"></div>`;
-  scoreDiv.innerHTML = '<div style="text-align:center;padding:16px"><div class="splash-loader-bar" style="width:80px;margin:0 auto"></div><p style="margin-top:8px;color:var(--text-secondary);font-size:13px">Analyse...</p></div>';
+  scoreDiv.innerHTML = '<div style="text-align:center;padding:16px"><div class="splash-loader-bar" style="width:80px;margin:0 auto"></div><p style="margin-top:8px;color:var(--text-secondary);font-size:13px">Analyse en cours...</p></div>';
 
   try {
     const result = await analysis.detectObjectPresence(photoData, 'plaza');
@@ -353,7 +410,7 @@ async function processMapPhoto(photoData, poi, route, resultDiv, scoreDiv) {
         <div class="photo-score-label">${result.score >= 70 ? '🌟 Photo validée !' : result.score >= 40 ? '👍 Pas mal !' : '🤔 À retenter'}</div>
       </div>
       <div style="padding:0 16px 16px;display:flex;gap:8px">
-        <button class="btn btn-secondary" style="flex:1" id="btn-retake">🔄 Retake</button>
+        <button class="btn btn-secondary" style="flex:1" id="btn-retake">🔄 Reprendre</button>
         <button class="btn btn-primary" style="flex:1" id="btn-save-photo">✓ Valider</button>
       </div>
     `;
@@ -383,7 +440,7 @@ async function processMapPhoto(photoData, poi, route, resultDiv, scoreDiv) {
         id: genId(),
         type: 'photo_taken',
         title: `Photo de ${poi.name}`,
-        detail: `Score: ${result.score}% - +${points} pts`,
+        detail: `Score: ${result.score}% — +${points} pts`,
         timestamp: Date.now()
       });
       showToast(`📸 Photo de "${poi.name}" sauvegardée !`, 'success');
@@ -391,7 +448,7 @@ async function processMapPhoto(photoData, poi, route, resultDiv, scoreDiv) {
     });
   } catch (err) {
     console.error(err);
-    scoreDiv.innerHTML = `<div style="text-align:center;padding:16px;color:var(--danger)">Erreur d'analyse</div>`;
+    scoreDiv.innerHTML = `<div style="text-align:center;padding:16px;color:var(--danger)">Erreur lors de l'analyse</div>`;
   }
 }
 

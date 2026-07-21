@@ -18,12 +18,12 @@ const ACHIEVEMENTS = [
     }
     return false;
   }},
-  { id: 'ach_bilbao_complete', name: 'Bilbao Explorer', description: 'Explorez tous les lieux de Bilbao', icon: '🏙️', check: async (allProgress) => {
+  { id: 'ach_bilbao_complete', name: 'Explorateur de Bilbao', description: 'Explorez tous les lieux de Bilbao', icon: '🏙️', check: async (allProgress) => {
     const bilbaoPois = cities.find(c => c.id === 'bilbao')?.pois || [];
     const bilbaoSteps = cities.find(c => c.id === 'bilbao')?.routes.flatMap(r => r.steps) || [];
     return bilbaoSteps.filter(s => allProgress.some(p => p.stepId === s.id && p.completed)).length >= bilbaoSteps.length;
   }},
-  { id: 'ach_zaragoza_complete', name: 'Zaragoza Explorer', description: 'Explorez tous les lieux de Saragosse', icon: '🏰', check: async (allProgress) => {
+  { id: 'ach_zaragoza_complete', name: 'Explorateur de Saragosse', description: 'Explorez tous les lieux de Saragosse', icon: '🏰', check: async (allProgress) => {
     const steps = cities.find(c => c.id === 'zaragoza')?.routes.flatMap(r => r.steps) || [];
     return steps.filter(s => allProgress.some(p => p.stepId === s.id && p.completed)).length >= steps.length;
   }},

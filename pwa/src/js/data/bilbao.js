@@ -30,8 +30,8 @@ export const bilbao = {
     { id: 'b11', name: 'Funicular d\'Artxanda', description: 'Funiculaire offrant une ascent rapide vers le mirador panoramique.', lat: 43.2706, lng: -2.9285, category: 'unusual', emoji: '🚡' },
     { id: 'b12', name: 'Street Art Ensanche', description: 'Quartier Ensanche richement décoré de fresques murales contemporaines.', lat: 43.2618, lng: -2.9330, category: 'streetart', emoji: '🎨' },
     { id: 'b13', name: 'Église de San Nicolás', description: 'Église baroque du XVIIIe surnommée "Cathédrale des pintxos".', lat: 43.2632, lng: -2.9268, category: 'monuments', emoji: '⛪' },
-    { id: 'b14', name: 'Nervión River Walk', description: 'Promenade le long de la rivière Nervion entre le Guggenheim et la Cathédrale.', lat: 43.2620, lng: -2.9310, category: 'nature', emoji: '🌊' },
-    { id: 'b15', name: 'Pintxo Bar Trail', description: 'Circuit des meilleurs bars à pintxos du Casco Viejo.', lat: 43.2614, lng: -2.9255, category: 'gastronomy', emoji: '🍢' },
+    { id: 'b14', name: 'Promenade de la Nervion', description: 'Promenade le long de la rivière Nervion entre le Guggenheim et la Cathédrale.', lat: 43.2620, lng: -2.9310, category: 'nature', emoji: '🌊' },
+    { id: 'b15', name: 'Circuit des bars à pintxos', description: 'Circuit des meilleurs bars à pintxos du Casco Viejo.', lat: 43.2614, lng: -2.9255, category: 'gastronomy', emoji: '🍢' },
     { id: 'b16', name: 'Teatro Arriaga', description: 'Théâtre néo-baroque inspiré de l\'Opéra Garnier, joyau architectural.', lat: 43.2598, lng: -2.9272, category: 'architecture', emoji: '🎭' },
     { id: 'b17', name: 'Abandoibarra', description: 'Zone de régénération urbaine le long de la rivière avec sculptures contemporaines.', lat: 43.2650, lng: -2.9310, category: 'streetart', emoji: '🗿' },
     { id: 'b18', name: 'Doña Casilda Park', description: 'Principal parc urbain avec étang, paons et musée des Beaux-Arts.', lat: 43.2712, lng: -2.9430, category: 'nature', emoji: '🦚' },
@@ -68,7 +68,7 @@ export const bilbao = {
     },
     {
       id: 'br02',
-      name: 'Art & Street Art Trail',
+      name: 'Parcours Art & Street Art',
       description: 'Un parcours urbain à la rencontre de l\'art contemporain et du street art.',
       emoji: '🎨',
       difficulty: 'Moyen',
@@ -130,7 +130,7 @@ export const bilbao = {
         { id: 'br04s01', poiId: 'b09', name: 'Mercado de la Ribera', description: 'Le plus grand marché couvert d\'Europe. Goûtez aux specialités locales.', lat: 43.2584, lng: -2.9288, category: 'gastronomy', challenges: [
           { id: 'ch14', type: 'photo', title: 'Le étal de poissons', description: 'Photographiez le plus beau stand de poissons du marché.', points: 100 }
         ]},
-        { id: 'br04s02', poiId: 'b15', name: 'Pintxo Bar Trail', description: 'Le circuit des meilleurs bars à pintxos du Casco Viejo. Goûtez et votez !', lat: 43.2614, lng: -2.9255, category: 'gastronomy', challenges: [
+        { id: 'br04s02', poiId: 'b15', name: 'Circuit des bars à pintxos', description: 'Le circuit des meilleurs bars à pintxos du Casco Viejo. Goûtez et votez !', lat: 43.2614, lng: -2.9255, category: 'gastronomy', challenges: [
           { id: 'ch15', type: 'photo', title: 'Le pintxo parfait', description: 'Photographiez le plus beau pintxo que vous trouvez.', points: 110 }
         ]},
         { id: 'br04s03', poiId: 'b08', name: 'Casco Viejo', description: 'Explorez les Siete Calles historiques et leur ambiance unique.', lat: 43.2616, lng: -2.9260, category: 'culture', challenges: [

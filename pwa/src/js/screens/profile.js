@@ -119,7 +119,7 @@ function showPhotoDetail(photo) {
       <div style="font-size:12px;color:var(--text-tertiary);margin-top:2px">${formatDate(photo.timestamp)} · ${timeAgo(photo.timestamp)}</div>
     </div>
     <div style="display:flex;gap:12px;justify-content:center;margin-bottom:16px">
-      ${photo.score !== undefined ? `<div style="text-align:center"><div style="font-size:22px;font-weight:800;color:var(--accent)">${photo.score}%</div><div style="font-size:10px;color:var(--text-secondary)">Score</div></div>` : ''}
+      ${photo.score !== undefined ? `<div style="text-align:center"><div style="font-size:22px;font-weight:800;color:var(--accent)">${photo.score}%</div><div style="font-size:10px;color:var(--text-secondary)">Note</div></div>` : ''}
       ${photo.points !== undefined ? `<div style="text-align:center"><div style="font-size:22px;font-weight:800;color:var(--accent)">+${photo.points}</div><div style="font-size:10px;color:var(--text-secondary)">Points</div></div>` : ''}
       ${photo.lat ? `<div style="text-align:center"><div style="font-size:12px;font-weight:600">📍</div><div style="font-size:10px;color:var(--text-secondary)">${photo.lat.toFixed(4)}, ${photo.lng.toFixed(4)}</div></div>` : ''}
     </div>

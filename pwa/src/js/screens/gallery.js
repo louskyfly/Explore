@@ -60,7 +60,7 @@ function showPhotoDetail(photo) {
       ${photo.score !== undefined ? `
         <div style="text-align:center">
           <div style="font-size:24px;font-weight:800;color:var(--accent)">${photo.score}%</div>
-          <div style="font-size:11px;color:var(--text-secondary)">Score</div>
+          <div style="font-size:11px;color:var(--text-secondary)">Note</div>
         </div>
       ` : ''}
       ${photo.points !== undefined ? `
