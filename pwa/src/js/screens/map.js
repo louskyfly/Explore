@@ -293,20 +293,24 @@ function addMarker(poi, city, route = null) {
   const marker = L.marker([poi.lat, poi.lng], { icon }).addTo(map);
 
   const navigateUrl = `https://www.google.com/maps/dir/?api=1&destination=${poi.lat},${poi.lng}&travelmode=walking`;
+  const imgHtml = poi.image ? `<img class="map-popup-img" src="${poi.image}" alt="${poi.name}" loading="lazy" onerror="this.style.display='none'">` : '';
   const popupContent = `
     <div class="map-popup">
-      <div class="map-popup-icon" style="background:${color}20;color:${color}">${poi.emoji || cat?.icon || '📍'}</div>
-      <div class="map-popup-name">${poi.name}</div>
-      <div class="map-popup-cat" style="background:${color}15;color:${color}">${cat?.label || poi.category}</div>
-      <p class="map-popup-desc">${poi.description || ''}</p>
-      <div class="map-popup-actions">
-        <a href="${navigateUrl}" target="_blank" rel="noopener" class="btn btn-primary btn-sm map-nav-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3,11 22,2 13,21 11,13 3,11"/></svg>
-          Naviguer
-        </a>
-        <button class="btn btn-sm map-photo-btn" data-poi-id="${poi.id}" data-route-id="${poi.routeId || ''}" data-poi-name="${poi.name}">
-          📸 Photo
-        </button>
+      ${imgHtml}
+      <div class="map-popup-body">
+        <div class="map-popup-icon" style="background:${color}20;color:${color}">${poi.emoji || cat?.icon || '📍'}</div>
+        <div class="map-popup-name">${poi.name}</div>
+        <div class="map-popup-cat" style="background:${color}15;color:${color}">${cat?.label || poi.category}</div>
+        <p class="map-popup-desc">${poi.description || ''}</p>
+        <div class="map-popup-actions">
+          <a href="${navigateUrl}" target="_blank" rel="noopener" class="btn btn-primary btn-sm map-nav-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3,11 22,2 13,21 11,13 3,11"/></svg>
+            Naviguer
+          </a>
+          <button class="btn btn-sm map-photo-btn" data-poi-id="${poi.id}" data-route-id="${poi.routeId || ''}" data-poi-name="${poi.name}">
+            📸 Photo
+          </button>
+        </div>
       </div>
     </div>
   `;
