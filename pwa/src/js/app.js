@@ -27,8 +27,8 @@ const screenRenderers = {
 };
 
 export async function initApp() {
-  await db.getDB();
-  await theme.init();
+  try { await db.getDB(); } catch(e) { console.error('DB error:', e); }
+  try { await theme.init(); } catch(e) { console.error('Theme error:', e); }
 
   router.init();
   router.onChange(async (tab) => {
@@ -36,11 +36,11 @@ export async function initApp() {
     if (renderer) {
       const container = document.getElementById('page-container');
       container.innerHTML = '';
-      await renderer(container);
+      try { await renderer(container); } catch(e) { console.error('Screen error:', e); }
     }
   });
 
-  document.getElementById('btn-menu').addEventListener('click', async () => {
+  document.getElementById('btn-menu')?.addEventListener('click', async () => {
     const username = await db.getSetting('username') || 'Invité';
     const teamId = await db.getSetting('currentTeam');
     const team = teamId ? await db.getTeam(teamId) : null;
@@ -48,7 +48,7 @@ export async function initApp() {
     showSidebar(true);
   });
 
-  document.getElementById('btn-notifications').addEventListener('click', () => {
+  document.getElementById('btn-notifications')?.addEventListener('click', () => {
     showToast('Notifications', 'info');
   });
 
@@ -65,19 +65,15 @@ export async function initApp() {
   });
 
   const container = document.getElementById('page-container');
-  await renderHome(container);
+  try { await renderHome(container); } catch(e) { console.error('Home render error:', e); }
 
-  checkAchievements();
+  try { checkAchievements(); } catch(e) {}
 
   if ('Notification' in window && Notification.permission === 'default') {
-    setTimeout(() => {
-      Notification.requestPermission();
-    }, 5000);
+    setTimeout(() => { Notification.requestPermission(); }, 5000);
   }
 
   if ('serviceWorker' in navigator) {
-    try {
-      await navigator.serviceWorker.register('/sw.js');
-    } catch (e) {}
+    try { await navigator.serviceWorker.register('/sw.js'); } catch (e) {}
   }
 }
