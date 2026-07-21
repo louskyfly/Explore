@@ -3,12 +3,44 @@
   "short_name": "Explore",
   "description": "Découvrez Bilbao et Saragosse en team ! Rallye photo et défis IA.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "background_color": "#0a0a1a",
   "theme_color": "#173B7A",
   "orientation": "portrait-primary",
   "categories": ["travel", "games", "social"],
   "lang": "fr",
+  "dir": "ltr",
+  "id": "/",
+  "prefer_related_applications": false,
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "handle_links": "preferred",
+  "share_target": {
+    "action": "/",
+    "method": "GET",
+    "params": {
+      "title": "name",
+      "text": "description",
+      "url": "link"
+    }
+  },
+  "shortcuts": [
+    {
+      "name": "Carte",
+      "short_name": "Carte",
+      "url": "/",
+      "icons": [{"src": "/icons/icon-192.svg", "sizes": "192x192"}]
+    },
+    {
+      "name": "Rallye Photo",
+      "short_name": "Rallye",
+      "url": "/",
+      "icons": [{"src": "/icons/icon-192.svg", "sizes": "192x192"}]
+    }
+  ],
   "icons": [
     {
       "src": "/icons/icon-192.svg",
@@ -21,6 +53,12 @@
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
     }
   ]
 }
