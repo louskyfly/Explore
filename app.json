@@ -1,0 +1,60 @@
+{
+  "expo": {
+    "name": "Explore",
+    "slug": "Explore",
+    "owner": "loupcode",
+    "version": "1.2.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.explore.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Explore a besoin d'accéder à votre caméra pour prendre des photos.",
+        "NSPhotoLibraryUsageDescription": "Explore a besoin d'accéder à vos photos pour les associer à vos activités.",
+        "NSLocationWhenInUseUsageDescription": "Explore utilise votre position pour enregistrer les coordonnées GPS de vos activités."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "versionCode": 3,
+      "package": "com.explore.app",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.RECORD_AUDIO"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Explore a besoin d'accéder à vos photos.",
+          "cameraPermission": "Explore a besoin d'accéder à votre caméra."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Explore utilise votre position pour les activités."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c9c0ec6e-7d77-4039-a063-21cf2057ee9f"
+      }
+    }
+  }
+}

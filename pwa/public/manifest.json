@@ -1,0 +1,26 @@
+{
+  "name": "Explore - Rallye Découverte",
+  "short_name": "Explore",
+  "description": "Découvrez Bilbao et Saragosse en team ! Rallye photo et défis IA.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a1a",
+  "theme_color": "#173B7A",
+  "orientation": "portrait-primary",
+  "categories": ["travel", "games", "social"],
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "/icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
