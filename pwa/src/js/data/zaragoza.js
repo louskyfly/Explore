@@ -14,7 +14,8 @@ export const zaragoza = {
     architecture: { label: 'Architecture', icon: '🏗️', color: '#5C6BC0' },
     unusual: { label: 'Insolite', icon: '✨', color: '#FFA726' },
     culture: { label: 'Culture', icon: '🎭', color: '#26C6DA' },
-    gastronomy: { label: 'Gastronomie', icon: '🍷', color: '#EF5350' }
+    gastronomy: { label: 'Gastronomie', icon: '🍷', color: '#EF5350' },
+    secrets: { label: 'Lieux Cachés', icon: '🔮', color: '#9C27B0' }
   },
   pois: [
     { id: 'z01', name: 'Basilique del Pilar', description: 'L\'un des plus grands sanctuaires mariaux au monde. Chef-d\'œuvre baroque aux coupoles colorées.', lat: 41.6558, lng: -0.8790, category: 'monuments', emoji: '⛪', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Basilica_del_Pilar_%28Zaragoza%2C_Aragon%29.jpg/500px-Basilica_del_Pilar_%28Zaragoza%2C_Aragon%29.jpg' },
@@ -36,7 +37,11 @@ export const zaragoza = {
     { id: 'z17', name: 'Barrio de Tubo', description: 'Le plus animé des quartiers historiques, labyrinthe de rues et de bars.', lat: 41.6520, lng: -0.8830, category: 'gastronomy', emoji: '🍷', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Zaragoza%2C_%22El_Tubo%22_Calle_de_los_Estebanes-PM_52791.jpg/500px-Zaragoza%2C_%22El_Tubo%22_Calle_de_los_Estebanes-PM_52791.jpg' },
     { id: 'z18', name: 'Teatro de la Zarzuela', description: 'Théâtre néo-baroque dédié à la zarzuela, spectacle lyrique espagnol.', lat: 41.6510, lng: -0.8870, category: 'architecture', emoji: '🎭', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fb/Teatro_de_la_zarzuela.jpg/500px-Teatro_de_la_zarzuela.jpg' },
     { id: 'z19', name: 'Jardines de Parque Grande', description: 'Le plus grand parc de Saragosse avec son palais et ses fontaines.', lat: 41.6420, lng: -0.8930, category: 'nature', emoji: '🌿', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Zaragoza_-_Parque_Grande_-_Amanecer.jpg/500px-Zaragoza_-_Parque_Grande_-_Amanecer.jpg' },
-    { id: 'z20', name: 'Street Art Las Fuentes', description: 'Le quartier Las Fuentes est une galerie à ciel ouvert de street art militant.', lat: 41.6400, lng: -0.8780, category: 'streetart', emoji: '🎨', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Zaragoza_-_graffiti_016.JPG/500px-Zaragoza_-_graffiti_016.JPG' }
+    { id: 'z20', name: 'Street Art Las Fuentes', description: 'Le quartier Las Fuentes est une galerie à ciel ouvert de street art militant.', lat: 41.6400, lng: -0.8780, category: 'streetart', emoji: '🎨', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Zaragoza_-_graffiti_016.JPG/500px-Zaragoza_-_graffiti_016.JPG' },
+    { id: 'z21', name: 'El Federal', description: 'Bar à tapas discret dans le Tubo, réputé pour ses croquetas et son ambiance intimiste de barrio.', lat: 41.6518, lng: -0.8828, category: 'secrets', emoji: '🔮', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Zaragoza%2C_%22El_Tubo%22_Calle_de_los_Estebanes-PM_52791.jpg/500px-Zaragoza%2C_%22El_Tubo%22_Calle_de_los_Estebanes-PM_52791.jpg' },
+    { id: 'z22', name: 'Cartuja Aula Dei', description: 'Monastère cartusien du XVIe siècle à 10 min du centre, avec 5 fresques originales de Francisco de Goya.', lat: 41.6730, lng: -0.8780, category: 'secrets', emoji: '🔮', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Cartuja_de_Aula_Dei_%28Zaragoza%29_-_Exterior_01.jpg/500px-Cartuja_de_Aula_Dei_%28Zaragoza%29_-_Exterior_01.jpg' },
+    { id: 'z23', name: 'Patio Gótico del Siglo XV', description: 'Patio gothique du XVe siècle caché à l\'intérieur d\'un centre commercial moderne, vestige médiéval surprenant.', lat: 41.6530, lng: -0.8795, category: 'secrets', emoji: '🔮', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Conjunto_Hist%C3%B3rico_de_Zaragoza_-_P8156119.jpg/500px-Conjunto_Hist%C3%B3rico_de_Zaragoza_-_P8156119.jpg' },
+    { id: 'z24', name: 'Baños Árabes del Río', description: 'Vestiges des bains arabes du XIe siècle, cachés sous une place du centre historique. Voûtes et colonnes d\'origine.', lat: 41.6510, lng: -0.8820, category: 'secrets', emoji: '🔮', image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/La_Aljafer%C3%ADa_-_Patio_de_Santa_Isabel_01.JPG/500px-La_Aljafer%C3%ADa_-_Patio_de_Santa_Isabel_01.JPG' }
   ],
   routes: [
     {
