@@ -12,28 +12,38 @@ export interface PendingChange {
 }
 
 export async function getPendingQueue(): Promise<PendingChange[]> {
-  const data = await AsyncStorage.getItem(QUEUE_KEY);
-  return data ? JSON.parse(data) : [];
+  try {
+    const data = await AsyncStorage.getItem(QUEUE_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
 }
 
 export async function addToQueue(change: Omit<PendingChange, 'id' | 'timestamp'>): Promise<void> {
-  const queue = await getPendingQueue();
-  queue.push({
-    ...change,
-    id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-    timestamp: new Date().toISOString(),
-  });
-  await AsyncStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
+  try {
+    const queue = await getPendingQueue();
+    queue.push({
+      ...change,
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      timestamp: new Date().toISOString(),
+    });
+    await AsyncStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
+  } catch {}
 }
 
 export async function clearQueue(): Promise<void> {
-  await AsyncStorage.removeItem(QUEUE_KEY);
+  try {
+    await AsyncStorage.removeItem(QUEUE_KEY);
+  } catch {}
 }
 
 export async function removeByIdFromQueue(activityId: string): Promise<void> {
-  const queue = await getPendingQueue();
-  const filtered = queue.filter(c => c.activityId !== activityId);
-  await AsyncStorage.setItem(QUEUE_KEY, JSON.stringify(filtered));
+  try {
+    const queue = await getPendingQueue();
+    const filtered = queue.filter(c => c.activityId !== activityId);
+    await AsyncStorage.setItem(QUEUE_KEY, JSON.stringify(filtered));
+  } catch {}
 }
 
 export async function processQueue(
@@ -64,6 +74,8 @@ export async function processQueue(
     }
   }
 
-  await AsyncStorage.setItem(QUEUE_KEY, JSON.stringify(remaining));
+  try {
+    await AsyncStorage.setItem(QUEUE_KEY, JSON.stringify(remaining));
+  } catch {}
   return processed;
 }
