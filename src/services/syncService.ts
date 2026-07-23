@@ -1,8 +1,3 @@
-import { db } from '../config/firebase';
-import {
-  collection, doc, setDoc, getDocs, deleteDoc,
-  query, where, writeBatch, serverTimestamp,
-} from 'firebase/firestore';
 import { Activity, Profile } from '../types/activity';
 
 const COLLECTION = 'activities';
@@ -35,8 +30,7 @@ function activityToDoc(a: Activity) {
   };
 }
 
-function docToActivity(doc: any): Activity {
-  const d = doc.data ? doc.data() : doc;
+function docToActivity(d: any): Activity {
   return {
     id: d.id,
     profile: d.profile || 'papa',
@@ -65,31 +59,46 @@ function docToActivity(doc: any): Activity {
 }
 
 export async function pushActivity(activity: Activity): Promise<void> {
-  const ref = doc(db, COLLECTION, activity.id);
+  const { getDb } = await import('../config/firebase');
+  const { doc, setDoc } = await import('firebase/firestore');
+  const database = await getDb();
+  const ref = doc(database, COLLECTION, activity.id);
   await setDoc(ref, activityToDoc(activity));
 }
 
 export async function pushActivities(activities: Activity[]): Promise<void> {
-  const batch = writeBatch(db);
+  const { getDb } = await import('../config/firebase');
+  const { doc, writeBatch } = await import('firebase/firestore');
+  const database = await getDb();
+  const batch = writeBatch(database);
   for (const a of activities) {
-    const ref = doc(db, COLLECTION, a.id);
+    const ref = doc(database, COLLECTION, a.id);
     batch.set(ref, activityToDoc(a));
   }
   await batch.commit();
 }
 
 export async function pullActivities(profile: Profile): Promise<Activity[]> {
-  const q = query(collection(db, COLLECTION), where('profile', '==', profile));
+  const { getDb } = await import('../config/firebase');
+  const { collection, getDocs, query, where } = await import('firebase/firestore');
+  const database = await getDb();
+  const q = query(collection(database, COLLECTION), where('profile', '==', profile));
   const snapshot = await getDocs(q);
-  return snapshot.docs.map(docToActivity);
+  return snapshot.docs.map((d: any) => docToActivity(d.data()));
 }
 
 export async function removeActivity(id: string): Promise<void> {
-  const ref = doc(db, COLLECTION, id);
+  const { getDb } = await import('../config/firebase');
+  const { doc, deleteDoc } = await import('firebase/firestore');
+  const database = await getDb();
+  const ref = doc(database, COLLECTION, id);
   await deleteDoc(ref);
 }
 
 export async function pullAllActivities(): Promise<Activity[]> {
-  const snapshot = await getDocs(collection(db, COLLECTION));
-  return snapshot.docs.map(docToActivity);
+  const { getDb } = await import('../config/firebase');
+  const { collection, getDocs } = await import('firebase/firestore');
+  const database = await getDb();
+  const snapshot = await getDocs(collection(database, COLLECTION));
+  return snapshot.docs.map((d: any) => docToActivity(d.data()));
 }
