@@ -2,12 +2,12 @@ import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getFirestore, enableMultiTabIndexedDbPersistence } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: 'REMPLACER_PAR_TA_CLE',
-  authDomain: 'REMPLACER_PAR_TON_PROJECT.firebaseapp.com',
-  projectId: 'REMPLACER_PAR_TON_PROJECT',
-  storageBucket: 'REMPLACER_PAR_TON_PROJECT.appspot.com',
-  messagingSenderId: 'REMPLACER_PAR_TON_SENDER_ID',
-  appId: 'REMPLACER_PAR_TON_APP_ID',
+  apiKey: 'AIzaSyCyndPhRG5qmWyYWApVSTcHxNMvCHIVPV0',
+  authDomain: 'explore-sync.firebaseapp.com',
+  projectId: 'explore-sync',
+  storageBucket: 'explore-sync.firebasestorage.app',
+  messagingSenderId: '399658164394',
+  appId: '1:399658164394:android:c68ea2a1baef548f9430d3',
 };
 
 let app: ReturnType<typeof initializeApp>;
