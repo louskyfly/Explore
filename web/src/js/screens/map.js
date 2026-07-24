@@ -59,10 +59,10 @@ export async function renderMap(container) {
           const popup = map.getPopup();
           if (popup) {
             popup.on('click', () => {
-              window.dispatchEvent(new CustomEvent('navigate-activity', { detail: a.id }));
+              window.dispatchEvent(new CustomEvent('navigate-detail', { detail: { id: a.id } }));
             });
             popup.getElement()?.querySelector('.map-popup-body')?.addEventListener('click', () => {
-              window.dispatchEvent(new CustomEvent('navigate-activity', { detail: a.id }));
+              window.dispatchEvent(new CustomEvent('navigate-detail', { detail: { id: a.id } }));
             });
           }
         }, 50);

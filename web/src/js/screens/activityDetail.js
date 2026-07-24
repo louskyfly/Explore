@@ -105,7 +105,7 @@ export async function renderActivityDetail(container, activityId) {
   }
 
   container.querySelector('#btn-edit').addEventListener('click', () => {
-    window.dispatchEvent(new CustomEvent('navigate-create', { detail: activityId }));
+    window.dispatchEvent(new CustomEvent('navigate-edit', { detail: { id: activityId } }));
   });
 }
 

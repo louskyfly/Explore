@@ -80,6 +80,12 @@ export const db = {
     return promisify(idx.getAll(profile));
   },
 
+  async getActivities(profile) {
+    const store = await tx('activities');
+    const idx = store.index('profile');
+    return promisify(idx.getAll(profile));
+  },
+
   async deleteActivity(id) {
     const store = await tx('activities', 'readwrite');
     return promisify(store.delete(id));
