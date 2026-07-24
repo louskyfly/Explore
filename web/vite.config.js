@@ -1,0 +1,22 @@
+import { defineConfig } from 'vite';
+import { resolve } from 'path';
+
+export default defineConfig({
+  root: '.',
+  publicDir: 'public',
+  base: './',
+  build: {
+    outDir: 'dist',
+    assetsInlineLimit: 4096,
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html')
+      }
+    }
+  },
+  server: {
+    port: 3001,
+    open: true,
+    host: true
+  }
+});

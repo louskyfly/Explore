@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['pwa/**']
+    paths: ['pwa/**', 'web/**']
 
 permissions:
   contents: read
@@ -23,15 +23,25 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Build PWA
+      - name: Build PhotoMap
         run: |
           cd pwa
           npm install
           npm run build
+      - name: Build Explore
+        run: |
+          cd web
+          npm install
+          npm run build
+      - name: Merge dist folders
+        run: |
+          mkdir -p output/explore
+          cp -r pwa/dist/* output/
+          cp -r web/dist/* output/explore/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: pwa/dist
+          path: output
 
   deploy:
     environment:

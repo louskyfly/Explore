@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, minimum-scale=1">
+  <meta name="theme-color" content="#173B7A" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#173B7A">
+  <meta name="color-scheme" content="dark light">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Explore">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-touch-fullscreen" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="description" content="Explore - Suivi d'activites personnels">
+  <meta name="application-name" content="Explore">
+  <meta name="msapplication-TileColor" content="#173B7A">
+  <meta name="msapplication-tap-highlight" content="no">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./icons/icon-192.svg">
+  <link rel="apple-touch-icon" sizes="192x192" href="./icons/icon-192.svg">
+  <link rel="apple-touch-icon" sizes="512x512" href="./icons/icon-512.svg">
+  <link rel="apple-touch-startup-image" href="./icons/icon-512.svg">
+  <link rel="icon" type="image/svg+xml" href="./icons/icon-192.svg">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="/src/css/main.css">
+  <title>Explore</title>
+  <style>
+    html, body {
+      overscroll-behavior: none;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+    }
+    @media all and (display-mode: standalone) {
+      body { padding-top: env(safe-area-inset-top); }
+      .glass-header { top: env(safe-area-inset-top); }
+    }
+    .splash-screen {
+      background: linear-gradient(135deg, #0a0a1a 0%, #173B7A 50%, #0e2550 100%);
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div id="splash-screen" class="splash-screen">
+      <div class="splash-content">
+        <div class="splash-icon">📋</div>
+        <h1 class="splash-title">Explore</h1>
+        <p class="splash-sub">Activites</p>
+        <div class="splash-loader"><div class="splash-loader-bar"></div></div>
+      </div>
+    </div>
+
+    <div id="auth-screen" class="hidden"></div>
+
+    <div id="main-screen" class="screen hidden">
+      <header class="glass-header">
+        <div class="header-content">
+          <div class="header-left">
+            <button id="btn-menu" class="icon-btn" aria-label="Menu">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+          </div>
+          <div class="header-center">
+            <h1 id="page-title">Explore</h1>
+          </div>
+          <div class="header-right">
+            <div id="profile-badge" class="profile-badge hidden">
+              <span id="profile-badge-name"></span>
+            </div>
+            <button id="btn-logout" class="icon-btn hidden" aria-label="Deconnexion">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div id="page-container" class="page-container"></div>
+
+      <nav class="glass-tabbar" id="tabbar">
+        <button class="tab-item active" data-tab="home" aria-label="Accueil">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+          <span>Accueil</span>
+        </button>
+        <button class="tab-item" data-tab="map" aria-label="Carte">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1,6 1,22 8,18 16,22 23,18 23,2 16,6 8,2"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+          <span>Carte</span>
+        </button>
+        <button class="tab-item" data-tab="stats" aria-label="Stats">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span>Stats</span>
+        </button>
+        <button class="tab-item" data-tab="settings" aria-label="Reglages">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>Reglages</span>
+        </button>
+      </nav>
+    </div>
+
+    <div id="sidebar" class="sidebar hidden">
+      <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+      <div class="sidebar-panel glass-panel">
+        <div class="sidebar-header">
+          <div class="sidebar-user">
+            <div class="avatar-large" id="sidebar-avatar">?</div>
+            <div class="sidebar-user-info">
+              <h3 id="sidebar-username">Invite</h3>
+              <p id="sidebar-profile-name">Aucun profil</p>
+            </div>
+          </div>
+          <button id="btn-close-sidebar" class="icon-btn" aria-label="Fermer">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <div class="sidebar-content">
+          <button class="sidebar-item" data-action="home">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+            <span>Accueil</span>
+          </button>
+          <button class="sidebar-item" data-action="map">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1,6 1,22 8,18 16,22 23,18 23,2 16,6 8,2"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+            <span>Carte</span>
+          </button>
+          <button class="sidebar-item" data-action="stats">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <span>Statistiques</span>
+          </button>
+          <div class="sidebar-divider"></div>
+          <button class="sidebar-item" data-action="settings">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>Parametres</span>
+          </button>
+          <div class="sidebar-divider"></div>
+          <button class="sidebar-item" data-action="logout">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Deconnexion</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-container"></div>
+    <div id="toast-container" class="toast-container"></div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script type="module" src="/src/js/main.js"></script>
+</body>
+</html>
