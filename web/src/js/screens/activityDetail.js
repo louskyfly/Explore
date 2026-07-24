@@ -72,8 +72,15 @@ export async function renderActivityDetail(container, activityId) {
         ` : ''}
       </div>
 
-      <div style="display:flex;gap:12px;padding:0 16px 100px;">
+      <div class="detail-actions">
         <button class="btn btn-secondary btn-full" id="btn-edit">Modifier</button>
+        <button class="btn btn-danger btn-icon" id="btn-delete" title="Supprimer">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+        </button>
+      </div>
+      <div class="detail-actions">
+        <button class="btn btn-secondary btn-full" id="btn-navigate">Naviguer</button>
+        <button class="btn btn-secondary btn-full" id="btn-share">Partager</button>
       </div>
     </div>
   `;
@@ -106,6 +113,39 @@ export async function renderActivityDetail(container, activityId) {
 
   container.querySelector('#btn-edit').addEventListener('click', () => {
     window.dispatchEvent(new CustomEvent('navigate-edit', { detail: { id: activityId } }));
+  });
+
+  container.querySelector('#btn-delete').addEventListener('click', () => {
+    showModal('Supprimer ?', 'Cette action est irreversible.', async () => {
+      await db.deleteActivity(activityId);
+      showToast('Activite supprimee', 'success');
+      window.dispatchEvent(new CustomEvent('navigate-home'));
+    });
+  });
+
+  container.querySelector('#btn-navigate').addEventListener('click', () => {
+    if (activity.lat && activity.lng) {
+      window.open(`https://www.google.com/maps/dir/?api=1&destination=${activity.lat},${activity.lng}`, '_blank');
+    } else {
+      showToast('Pas de localisation', 'error');
+    }
+  });
+
+  container.querySelector('#btn-share').addEventListener('click', async () => {
+    const shareData = {
+      title: activity.title,
+      text: `${activity.title}${activity.description ? ' - ' + activity.description : ''}`,
+    };
+    if (activity.lat && activity.lng) {
+      shareData.url = `https://www.google.com/maps?q=${activity.lat},${activity.lng}`;
+    }
+    try {
+      await navigator.share(shareData);
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        showToast('Partage annule', 'error');
+      }
+    }
   });
 }
 

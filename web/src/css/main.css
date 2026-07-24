@@ -523,6 +523,8 @@ textarea.input { min-height: 80px; }
 .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
 .btn-secondary { background: var(--input-bg); color: var(--text-primary); border: 1px solid var(--border); }
 .btn-danger { background: var(--danger); color: #fff; }
+.btn-danger.btn-icon { width: 44px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; padding: 0; }
+.detail-actions { display: flex; gap: 12px; padding: 0 16px 8px; }
 .btn-ghost { background: transparent; color: var(--text-secondary); }
 .btn-full { width: 100%; }
 .btn-sm { padding: 8px 14px; font-size: 13px; border-radius: 10px; }
