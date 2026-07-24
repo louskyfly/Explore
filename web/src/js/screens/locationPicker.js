@@ -161,6 +161,6 @@ export function renderLocationPicker(container, params) {
     if (params?.onSelect) {
       params.onSelect(selectedLat, selectedLng, selectedName);
     }
-    window.history.back();
+    window.dispatchEvent(new CustomEvent('navigate-back'));
   });
 }
