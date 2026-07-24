@@ -115,12 +115,10 @@ export async function renderActivityDetail(container, activityId) {
     window.dispatchEvent(new CustomEvent('navigate-edit', { detail: { id: activityId } }));
   });
 
-  container.querySelector('#btn-delete').addEventListener('click', () => {
-    showModal('Supprimer ?', 'Cette action est irreversible.', async () => {
-      await db.deleteActivity(activityId);
-      showToast('Activite supprimee', 'success');
-      window.dispatchEvent(new CustomEvent('navigate-home'));
-    });
+  container.querySelector('#btn-delete').addEventListener('click', async () => {
+    await db.deleteActivity(activityId);
+    showToast('Activite supprimee', 'success');
+    window.dispatchEvent(new CustomEvent('navigate-home'));
   });
 
   container.querySelector('#btn-navigate').addEventListener('click', () => {
