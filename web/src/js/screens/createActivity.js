@@ -51,7 +51,7 @@ export async function renderCreateActivity(container, editingId) {
             </div>
             ${imageData ? '<button type="button" class="image-picker-remove" id="remove-image">\u2715</button>' : ''}
           </div>
-          <input type="file" id="image-input" accept="image/*" capture="environment" style="display:none">
+          <input type="file" id="image-input" accept="image/*" style="display:none">
         </div>
 
         <div class="input-group">
@@ -215,16 +215,11 @@ export async function renderCreateActivity(container, editingId) {
     imageInput.click();
   });
 
-  imageInput.addEventListener('change', (e) => {
+  imageInput.addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    if (file.size > 5 * 1024 * 1024) {
-      showToast('Image trop lourde (max 5 Mo)', 'error');
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = () => {
-      imageData = reader.result;
+    try {
+      imageData = await compressImage(file, 1200, 0.8);
       imagePicker.classList.add('has-image');
       imagePicker.innerHTML = `
         <img src="${imageData}" alt="Photo">
@@ -239,8 +234,11 @@ export async function renderCreateActivity(container, editingId) {
           <span class="image-picker-text">Ajouter une photo</span>
         `;
       });
-    };
-    reader.readAsDataURL(file);
+    } catch(err) {
+      console.error('Image error:', err);
+      showToast('Erreur lors du chargement', 'error');
+    }
+    imageInput.value = '';
   });
 
   if (imageData) {
@@ -350,6 +348,33 @@ function showConfirmModal(title, message, onConfirm) {
   modal.querySelector('.modal-close').addEventListener('click', close);
   modal.querySelector('[data-action="cancel"]').addEventListener('click', close);
   modal.querySelector('[data-action="confirm"]').addEventListener('click', () => { close(); onConfirm(); });
+}
+
+function compressImage(file, maxDim, quality) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('FileReader failed'));
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('Image load failed'));
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        if (w > maxDim || h > maxDim) {
+          const ratio = Math.min(maxDim / w, maxDim / h);
+          w = Math.round(w * ratio);
+          h = Math.round(h * ratio);
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        const result = canvas.toDataURL('image/jpeg', quality);
+        resolve(result);
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
 }
 
 function escapeAttr(str) {
